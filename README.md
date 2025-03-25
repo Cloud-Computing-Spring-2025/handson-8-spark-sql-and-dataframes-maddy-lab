@@ -323,3 +323,64 @@ A leaderboard of verified users based on audience engagement.
 ---
 
 Now go uncover the trends behind the tweets 📊🐤✨
+
+
+---
+
+## ✅ Approach & Implementation
+
+### Environment Setup
+
+- We used **Bitnami’s Spark Docker image** and orchestrated a multi-container Spark setup using `docker-compose`.
+- The project source code, input files (`posts.csv`, `users.csv`), and output directory were mounted into the container under `/app`.
+
+### Execution Steps
+
+1. We mounted local folders (`./input`, `./src`, `./outputs`) to `/app` in the container to ensure accessibility inside `spark-master`.
+2. Entered the container:
+   ```bash
+   docker exec -it my-spark-master bash
+   cd /app
+   ```
+3. Executed each Spark job with:
+   ```bash
+   spark-submit src/task1_hashtag_trends.py
+   spark-submit src/task2_engagement_by_age.py
+   spark-submit src/task3_sentiment_vs_engagement.py
+   spark-submit src/task4_top_verified_users.py
+   ```
+
+---
+
+## ✅ Summary of Results
+
+### 1. Hashtag Trends
+- We extracted and exploded comma-separated hashtags.
+- Computed frequencies and displayed top 10.
+- Output saved in: `outputs/hashtag_trends.csv`
+
+### 2. Engagement by Age Group
+- Joined `posts.csv` with `users.csv` on `UserID`.
+- Grouped by `AgeGroup` and calculated average likes and retweets.
+- Output saved in: `outputs/engagement_by_age.csv`
+
+### 3. Sentiment vs Engagement
+- Categorized posts into Positive, Neutral, Negative based on `SentimentScore`.
+- Computed average engagement metrics per category.
+- Output saved in: `outputs/sentiment_engagement.csv`
+
+### 4. Top Verified Users by Reach
+- Filtered users where `Verified = True`.
+- Calculated total reach as `Likes + Retweets` and ranked top 5.
+- Output saved in: `outputs/top_verified_users.csv`
+
+---
+
+## 🧠 Key Learnings
+
+- Efficient use of **Spark DataFrames** for ETL and analytics.
+- Leveraged **column operations, grouping, filtering, and joins**.
+- Applied **best practices** in containerized development and script execution using Docker.
+
+---
+
